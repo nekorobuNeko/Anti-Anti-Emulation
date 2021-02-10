@@ -1,7 +1,7 @@
-import mypkg
 import os
 os.system("python -m pip install psutil")
 os.system("python -m pip install pywin32")
+import mypkg
 mypkg.activewindow.CheckWindow()
 mypkg.computername.CheckComputerName()
 mypkg.core.CheckCore()
