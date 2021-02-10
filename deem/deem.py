@@ -1,0 +1,10 @@
+import mypkg
+mypkg.activewindow.CheckWindow()
+mypkg.computername.CheckComputerName()
+mypkg.core.CheckCore()
+mypkg.disksize.CheckDisksize()
+mypkg.file.CheckFile()
+mypkg.macadress.CheckMacAdress()
+mypkg.memory.CheckMemory()
+mypkg.process.CheckProcess()
+mypkg.registry.CheckRegistry()
