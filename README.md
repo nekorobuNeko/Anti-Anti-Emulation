@@ -16,7 +16,7 @@
 4. GetDiskFreeSpaceEx関数
    マルウェアはこの関数を使用し、ディスクサイズを基に仮想環境かどうかを判断している。
    現代のほとんどのパソコンはディスクサイズが60Gb以上のため、ディスクサイズがそれ以下の時、仮想環境と判断している。
-   DLLをwithdll.exeで挿入することでディスクサイズが40Gbであるという応答を返すことができる。
+   DLLをwithdll.exeで挿入することでディスクサイズが60Gbであるという応答を返すことができる。
    
 5. RegOpenKeyEx
    マルウェアはこの関数を使用し、仮想環境特有のレジストリを発見したら仮想環境だと判断。
@@ -35,4 +35,7 @@
 withdll.exe /d:挿入するDLL 挿入されるファイル
 
 実行例:
+GetDiskFreeSpaceEx関数を普通に使用した時、パソコンのディスクサイズを表示する。
+![getdisk1](https://user-images.githubusercontent.com/78842084/119761874-95824f00-bee7-11eb-9cdb-d8de397d3be5.JPG)
+ここにDLLを挿入することで、返り値を変更し、ディスクサイズが60Gbであると表示させることができる
 ![getdisk3](https://user-images.githubusercontent.com/78842084/119761775-67047400-bee7-11eb-9083-d5c211fdde49.JPG)
