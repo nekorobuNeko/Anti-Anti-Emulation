@@ -1,5 +1,5 @@
 ﻿// dllmain.cpp : DLL アプリケーションのエントリ ポイントを定義します。
-//#include "stdafx.h"
+
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -17,26 +17,21 @@
 #include <windows.h>
 #include <detours.h>
 #pragma comment(lib, "detours.lib")
-DWORD dw1 = 10;
 static LONG dwSlept = 0;
-static BOOL(WINAPI* TrueGetDiskFreeSpace)(LPCTSTR RootPathName,
-	LPDWORD SectorsPerCluster,
-	LPDWORD BytesPerSector,
-	LPDWORD FreeClusters,
-	LPDWORD Clusters) = GetDiskFreeSpace;
-
-BOOL WINAPI newGetDiskFreeSpace(__out LPCTSTR RootPathName,
-	LPDWORD SectorsPerCluster,
-	LPDWORD BytesPerSector,
-	LPDWORD FreeClusters,
-	LPDWORD Clusters) {
-	
-		puts("hooked!!");
-		return TrueGetDiskFreeSpace(RootPathName,
-			SectorsPerCluster,
-			BytesPerSector,
-			FreeClusters,
-			&dw1);
+static BOOL (WINAPI* TrueGetDiskFreeSpaceEx)(LPCTSTR lpDirectoryName, PULARGE_INTEGER lpFreeBytesAvailable,
+	PULARGE_INTEGER lpTotalNumberOfBytes,
+	PULARGE_INTEGER lpTotalNumberOfFreeBytes) = GetDiskFreeSpaceEx;
+SYSTEM_INFO info;
+void WINAPI newGetDiskFreeSpaceEx(LPCTSTR lpDirectoryName, PULARGE_INTEGER lpFreeBytesAvailable,
+	PULARGE_INTEGER lpTotalNumberOfBytes,
+	PULARGE_INTEGER lpTotalNumberOfFreeBytes) {
+	ULONGLONG a = 64424509440;
+	ULONGLONG b = 42949672960;
+	TrueGetDiskFreeSpaceEx(lpDirectoryName, lpFreeBytesAvailable, lpTotalNumberOfBytes, lpTotalNumberOfFreeBytes);
+	puts("hooked");
+	lpFreeBytesAvailable->QuadPart = b;
+	lpTotalNumberOfFreeBytes->QuadPart = b;
+	lpTotalNumberOfBytes->QuadPart = a;
 }
 
 
@@ -59,7 +54,7 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID reserved)
 
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		DetourAttach(&(PVOID&)TrueGetDiskFreeSpace, newGetDiskFreeSpace);
+		DetourAttach(&(PVOID&)TrueGetDiskFreeSpaceEx, newGetDiskFreeSpaceEx);
 		error = DetourTransactionCommit();
 
 		if (error == NO_ERROR) {
@@ -74,7 +69,7 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID reserved)
 	else if (dwReason == DLL_PROCESS_DETACH) {
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		DetourDetach(&(PVOID&)TrueGetDiskFreeSpace, newGetDiskFreeSpace);
+		DetourDetach(&(PVOID&)TrueGetDiskFreeSpaceEx, newGetDiskFreeSpaceEx);
 		error = DetourTransactionCommit();
 
 		//   printf("simple" DETOURS_STRINGIFY(DETOURS_BITS) ".dll:"
@@ -83,3 +78,6 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID reserved)
 	}
 	return TRUE;
 }
+
+//
+///////////////////////////////////////////////////////////////// End of File.
