@@ -34,8 +34,15 @@
 コマンド例:
 withdll.exe /d:挿入するDLL 挿入されるファイル
 
-実行例:
-GetDiskFreeSpaceEx関数を普通に使用した時、パソコンのディスクサイズを表示する。
+実行例1:
+GetDiskFreeSpaceEx関数を普通に使用した時、パソコンのディスクサイズを取得する。
 ![getdisk1](https://user-images.githubusercontent.com/78842084/119761874-95824f00-bee7-11eb-9cdb-d8de397d3be5.JPG)
+
 ここにDLLを挿入することで、返り値を変更し、ディスクサイズが60Gbであると表示させることができる
 ![getdisk3](https://user-images.githubusercontent.com/78842084/119761775-67047400-bee7-11eb-9083-d5c211fdde49.JPG)
+実行例2:
+GetSystemInfo関数を普通に使用した時、パソコンのCPUのコアの数を取得する。
+![getsys1](https://user-images.githubusercontent.com/78842084/119762331-720bd400-bee8-11eb-9f0c-7dbb0472d729.jpg)
+
+ここにDLLを挿入することで、返り値を変更し、CPUのコアの数が1つであると表示させることができる
+![getsys3](https://user-images.githubusercontent.com/78842084/119762392-94055680-bee8-11eb-8922-c80f2df78e2e.png)
